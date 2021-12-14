@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Update user</title>
+    <style>
+        .fstyle {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+<h1>Update - <span th:text="${user.getUsername()}"></span> <span th:text="${user.getSurname()}"></span></h1>
+
+<table border="1">
+    <thread>
+        <tr>
+            <th><h2>Name</h2></th>
+            <th><h2>Surname</h2></th>
+            <th><h2>Age</h2></th>
+            <th><h2>E-mail</h2></th>
+            <th><h2>Login</h2></th>
+            <th><h2>Password</h2></th>
+            <th><h2>Roles</h2></th>
+            <th><h2>Button!</h2></th>
+        </tr>
+    </thread>
+    <tbody>
+    <tr>
+        <form th:action="@{/admin/update}" th:object="${user}" method="post">
+            <input type="hidden" name="id" th:value="${user.getId()}">
+            <td><input type="text" name="username" th:id="username" th:value="${user.getUsername()}"></td>
+            <td><input type="text" name="surname" th:id="surname" th:value="${user.getSurname()}"></td>
+            <td><input type="text" name="age" th:id="age" th:value="${user.getAge()}"></td>
+            <td><input type="text" name="email" th:id="email" th:value="${user.getEmail()}"></td>
+            <td><input type="text" name="login" th:id="login" th:value="${user.getLogin()}"></td>
+            <td><input type="text" name="password" th:id="password" th:value="${user.getPassword()}"></td>
+            <td>
+                <label th:each="role : ${roles}">
+                    <input type="checkbox" name="roles" th:value="${role.userRole}"
+                           th:checked="${user.roles.contains(role)}"/>
+                    <label th:text="${role.userRole}"></label>
+                </label>
+            </td>
+            <td class="fstyle">
+                <button type="submit">Save</button>
+            </td>
+        </form>
+    </tr>
+    </tbody>
+</table>
+
+<br>
+<form th:action="@{/admin}">
+    <button type="submit">back to admin_page</button>
+</form>
+
+<br>
+<form th:method="post" th:action="@{/logout}">
+    <button type="submit">Logout</button>
+</form>
+
+</body>
+</html>

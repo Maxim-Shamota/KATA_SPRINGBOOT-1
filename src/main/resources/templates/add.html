@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Add user</title>
+</head>
+<body>
+<h2>New user</h2>
+
+<br>
+<form th:method="POST" th:action="@{/admin/add}" th:object="${user}">
+    <label for="username">Name: </label>
+    <input type="text" th:field="*{username}" id="username">
+    <br><br>
+
+    <label for="surname">Surname: </label>
+    <input type="text" th:field="*{surname}" id="surname">
+    <br><br>
+
+    <label for="age">Age: </label>
+    <input type="number" th:field="*{age}" id="age">
+    <br><br>
+
+    <label for="email">Email: </label>
+    <input type="text" th:field="*{email}" id="email">
+    <br><br>
+
+    <label for="login">Login: </label>
+    <input type="text" th:field="*{login}" id="login">
+    <br><br>
+
+    <label for="password">Password: </label>
+    <input type="password" th:field="*{password}" id="password"/>
+    <br><br>
+
+    <label>Roles</label>
+    <!--    <label th:each="role : ${roles}">-->
+    <!--        <input type="checkbox" name="roles" th:value="${role.userRole}"-->
+    <!--               th:checked="${user.roles.contains(role)}"/>-->
+    <!--        <label th:text="${role.userRole}"></label>-->
+    <!--    </label>-->
+    <input type="checkbox" name="checkBoxRoles" value="USER"/>USER
+    <input type="checkbox" name="checkBoxRoles" value="ADMIN"/>ADMIN
+    <br><br>
+
+    <input type="submit" value="Add"/>
+</form>
+
+<br>
+<form th:action="@{/admin}">
+    <button type="submit">back to admin_page</button>
+</form>
+
+<br>
+<form th:method="post" th:action="@{/logout}">
+    <button type="submit">Logout</button>
+</form>
+
+</body>
+</html>
