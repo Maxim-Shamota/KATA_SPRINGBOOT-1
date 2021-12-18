@@ -1,6 +1,7 @@
 package web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -27,46 +28,36 @@ public class AdminController {
     }
 
     @GetMapping(value = "admin")
-    public String showAdminPage(Model model) {
+    public String showAdminPage(@AuthenticationPrincipal User user, Model model) {
+        model.addAttribute("user", user);
         model.addAttribute("users", userService.getAllUsers());
+        model.addAttribute("roles", roleService.getAllRoles());
         return "admin";
     }
 
     @GetMapping(value = "admin/add")
-    public String addNewUser(Model model) {
-        model.addAttribute("user", new User());
+    public String addNewUser(@AuthenticationPrincipal User user, Model model) {
+        model.addAttribute("user", user);
         model.addAttribute("roles", roleService.getAllRoles());
         return "add";
     }
 
     @PostMapping(value = "admin/add")
-    public String addNewUser(@ModelAttribute("user") User user,
-                             @RequestParam(value = "checkBoxRoles") String[] checkBoxRoles) {
-        Set<Role> roleSet = new HashSet<>();
-        for (String role : checkBoxRoles) {
-            roleSet.add(roleService.getRole(role));
-        }
-        user.setRoles(roleSet);
-//        setUserRole(user);
+    public String addNewUser(@ModelAttribute("user") User user) {
+        setUserRole(user);
         userService.saveUser(user);
         return "redirect:/admin";
     }
 
-    @GetMapping(value = "admin/update/{id}")
-    public String updateUser(Model model, @PathVariable("id") long id) {
-        model.addAttribute("user", userService.getUserById(id));
+    @PutMapping(value = "admin/update/{id}")
+    public String updateUser(@ModelAttribute("user") User user, Model model) {
         model.addAttribute("roles", roleService.getAllRoles());
-        return "update";
-    }
-
-    @PostMapping(value = "admin/update")
-    public String updateUser(@ModelAttribute("user") User user) {
         setUserRole(user);
         userService.updateUser(user);
         return "redirect:/admin";
     }
 
-    @PostMapping(value = "admin/user/{id}")
+    @DeleteMapping(value = "admin/user/{id}")
     public String deleteUser(@PathVariable("id") long id) {
         userService.deleteUser(id);
         return "redirect:/admin";

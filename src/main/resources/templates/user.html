@@ -1,42 +1,107 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" class="h-100"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>User info</title>
-    <style>
-        table th, table td {
-            padding: 11px;
-            text-align: center;
-        }
-    </style>
+    <title>User page</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
 </head>
 <body>
-<h2>Info about - <span th:text="${user.getUsername()}"></span> <span th:text="${user.getSurname()}"></span></h2>
 
-<br>
-<table border="1">
-    <tr>
-        <th><h2>ID</h2></th>
-        <th><h2>Name</h2></th>
-        <th><h2>Surname</h2></th>
-        <th><h2>Age</h2></th>
-        <th><h2>Email</h2></th>
-        <th><h2>Login</h2></th>
-    </tr>
-    <tr>
-        <td th:text="${user.getId()}">ID</td>
-        <td th:text="${user.getUsername()}">name</td>
-        <td th:text="${user.getSurname()}">surname</td>
-        <td th:text="${user.getAge()}">age</td>
-        <td th:text="${user.getEmail()}">email</td>
-        <td th:text="${user.getLogin()}">login</td>
-    </tr>
-</table>
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+        <span class="align-middle navbar-brand"
+              th:text="${user.getEmail()} + ' with roles: ' + ${user.getRoles()}">
+        </span>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+        </ul>
+    </div>
+</nav>
 
-<br>
-<form th:method="post" th:action="@{/logout}">
-    <button type="submit">Logout</button>
-</form>
+<div class="container-fluid h-100">
+    <div class="row h-100">
 
+        <div class="p-0 col-2">
+            <div class="nav flex-column nav-pills pt-4" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <a class="nav-link" href="/admin" sec:authorize="hasAuthority('ADMIN')" role="tab"
+                   aria-controls="v-pills-home" aria-selected="true">Admin</a>
+                <a class="nav-link active" href="/user" sec:authorize="(hasAnyAuthority('ADMIN', 'USER'))" role="tab"
+                   aria-controls="v-pills-profile" aria-selected="false">User</a>
+            </div>
+        </div>
+
+        <div class="p-0 col-10 bg-light">
+            <div class="tabs p-4">
+                <h1>User information-page</h1>
+                <div class="pt-2 tab-content">
+                    <div class="tab-pane fade show active" id="description">
+                        <div class="p-3 border">
+                            <h5 class="my-0 mx-2">User info</h5>
+                        </div>
+                        <div class="p-3 bg-white border border-top-0">
+                            <table class="usersTable table table-striped bg-white">
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Age</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td th:text="${user.getId()}"></td>
+                                    <td th:text="${user.getUsername()}"></td>
+                                    <td th:text="${user.getSurname()}"></td>
+                                    <td th:text="${user.getAge()}"></td>
+                                    <td th:text="${user.getEmail()}"></td>
+                                    <td>
+                                        <th:block th:each="role: ${user.getRoles()}"
+                                                  th:text="${role.getUserRole()} + ' '"></th:block>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--<h2>Info about - <span th:text="${user.getUsername()}"></span> <span th:text="${user.getSurname()}"></span></h2>-->
+
+<!--<br>-->
+<!--<table border="1">-->
+<!--    <tr>-->
+<!--        <th><h2>ID</h2></th>-->
+<!--        <th><h2>Name</h2></th>-->
+<!--        <th><h2>Surname</h2></th>-->
+<!--        <th><h2>Age</h2></th>-->
+<!--        <th><h2>Email</h2></th>-->
+<!--        <th><h2>Login</h2></th>-->
+<!--    </tr>-->
+<!--    <tr>-->
+<!--        <td th:text="${user.getId()}">ID</td>-->
+<!--        <td th:text="${user.getUsername()}">name</td>-->
+<!--        <td th:text="${user.getSurname()}">surname</td>-->
+<!--        <td th:text="${user.getAge()}">age</td>-->
+<!--        <td th:text="${user.getEmail()}">email</td>-->
+<!--        <td th:text="${user.getLogin()}">login</td>-->
+<!--    </tr>-->
+<!--</table>-->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-/bQdsTh/da6pkI1MST/rWKFNjaCP5gBSY4sEBT38Q/9RBh9AH40zEOg7Hlq2THRZ"
+        crossorigin="anonymous"></script>
 </body>
 </html>
